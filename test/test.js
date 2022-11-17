@@ -10,7 +10,8 @@ const Post = require("../model/Post");
 
 chai.should();
 chai.use(chaiHttp);
-let token;
+let token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzc2NjZhNzUyNmJjOWFlODNiZDdhNjYiLCJpYXQiOjE2Njg3MDM5OTN9.tAP82EHdsB7triIBdBT9jbCga32TVLW3zQNFrVxxr7Y";
 
 describe("POST /api/authenticate", () => {
   it("should return JWT token if successfull authentication", async () => {
@@ -19,6 +20,7 @@ describe("POST /api/authenticate", () => {
       password: "sampreeth",
     };
     const res = await request(app).post("/api/authenticate").send(loginDetails);
+    console.log(res.body);
     expect(res.status).to.equal(200);
     expect(res.body.message).to.equal("Login Successfull");
     token = res.body.token;
