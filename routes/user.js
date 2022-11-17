@@ -15,7 +15,7 @@ router.get("/user", verify, async (req, res) => {
 });
 
 // Follow the user
-router.put("/follow/:id", verify, async (req, res) => {
+router.post("/follow/:id", verify, async (req, res) => {
   if (req.user._id !== req.params.id) {
     try {
       const user = await User.findById(req.params.id);
@@ -36,7 +36,7 @@ router.put("/follow/:id", verify, async (req, res) => {
 });
 
 //Unfollow the user
-router.put("/unfollow/:id", verify, async (req, res) => {
+router.post("/unfollow/:id", verify, async (req, res) => {
   if (req.user._id !== req.params.id) {
     try {
       const user = await User.findById(req.params.id);

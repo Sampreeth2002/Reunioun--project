@@ -5,11 +5,24 @@ ObjectId = require("mongodb").ObjectID;
 
 router.post("/", verify, async (req, res) => {
   // Enter post title and description as req.body
+
+  if (req.body.title === undefined) {
+    res.status(400).send({
+      message: "Please enter title of the post",
+    });
+  }
+
+  if (req.body.description === undefined) {
+    res.status(400).send({
+      message: "Please enter description of the post",
+    });
+  }
+
   req.body.userId = req.user._id;
   const newPost = new Post(req.body);
   try {
     const savedPost = await newPost.save();
-    res.send({
+    res.status(200).send({
       post_id: savedPost._id,
       description: savedPost.description,
       title: savedPost.title,
