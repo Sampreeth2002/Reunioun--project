@@ -12,6 +12,7 @@ The project contains the docker-compose file for running the full web app under 
 <br>
 <br>
 Deployed Link for the project : https://reunioun-project.onrender.com
+Docker compose File : https://github.com/Sampreeth2002/Reunioun--project/blob/master/docker-compose.yml
 
 ## Note
 
