@@ -7,11 +7,13 @@ const Comment = require("../model/Comment");
 // Get the user details
 router.get("/user", verify, async (req, res) => {
   const userDetails = await User.findById(req.user._id);
-  res.send({
-    username: userDetails.name,
-    no_of_followers: userDetails.followers.length,
-    no_of_followings: userDetails.followings.length,
-  });
+  res
+    .send({
+      username: userDetails.name,
+      no_of_followers: userDetails.followers.length,
+      no_of_followings: userDetails.followings.length,
+    })
+    .status(200);
 });
 
 // Follow the user
@@ -23,9 +25,9 @@ router.post("/follow/:id", verify, async (req, res) => {
       if (!user.followers.includes(req.user._id)) {
         await user.updateOne({ $push: { followers: req.user._id } });
         await currentUser.updateOne({ $push: { followings: req.params.id } });
-        res.send("You have followed the user");
+        res.send("You have followed the user").status(200);
       } else {
-        res.send("You have already followed the user");
+        res.send("You have already followed the user").status(400);
       }
     } catch (err) {
       res.status(400).send(err);
@@ -59,10 +61,14 @@ router.post("/unfollow/:id", verify, async (req, res) => {
 
 //Post like API
 router.post("/like/:id", verify, async (req, res) => {
+  if (req.params.id === undefined) {
+    return res.send("Please enter the post id");
+  }
   try {
     const post = await Post.findById(req.params.id);
     if (!post.likes.includes(req.user._id)) {
       await post.updateOne({ $push: { likes: req.user._id } });
+      await post.updateOne({ $pull: { unlikes: req.user._id } });
       res.send("You have liked the post");
     } else {
       await res.send("Already liked the post");
@@ -78,6 +84,7 @@ router.post("/unlike/:id", verify, async (req, res) => {
     const post = await Post.findById(req.params.id);
     if (!post.unlikes.includes(req.user._id)) {
       await post.updateOne({ $push: { unlikes: req.user._id } });
+      await post.updateOne({ $pull: { likes: req.user._id } });
       res.send("You have unliked the post");
     } else {
       await res.send("Already unliked the post");

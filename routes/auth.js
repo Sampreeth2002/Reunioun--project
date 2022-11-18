@@ -7,6 +7,14 @@ const { registerValidation, loginValidation } = require("../validation");
 // Login using JWT and bycrypt
 router.post("/authenticate", async (req, res) => {
   //Login Validation
+  if (req.body.email === undefined) {
+    return res.status(400).send({ message: "Please enter email" });
+  }
+
+  if (req.body.email === undefined) {
+    return res.status(400).send({ message: "Please enter password" });
+  }
+
   const { error } = loginValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
