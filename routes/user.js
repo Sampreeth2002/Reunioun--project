@@ -9,6 +9,7 @@ router.get("/user", verify, async (req, res) => {
   const userDetails = await User.findById(req.user._id);
   res
     .send({
+      user_id: userDetails._id,
       username: userDetails.name,
       no_of_followers: userDetails.followers.length,
       no_of_followings: userDetails.followings.length,
